@@ -1,19 +1,21 @@
 mod models;
-
-use models::*;
-
+use models::Package;
 fn main() {
-    let package = Package {
-        manifest: Manifest {
-            name: "example".to_string(),
-            version: "0.1.0".to_string(),
-            dependencies: Dependencies {
-                crates: vec!["serde".to_string(), "tokio".to_string()],
-            },
-        },
+    let mut my_pkg = Package {
+        name: String::from("waybar"),
+        version: 12,
+        is_installed: false,
     };
 
-    println!("Package name: {}", package.manifest.name);
-    println!("Package version: {}", package.manifest.version);
-    println!("Dependencies: {:?}", package.manifest.dependencies.crates);
+    println!("--- Тест 1: Обновление неустановленного пакета ---");
+    my_pkg.upgrade(); // Ожидаем ошибку
+
+    println!("\n--- Тест 2: Установка ---");
+    my_pkg.install(); // Ожидаем успех
+
+    println!("\n--- Тест 3: Обновление установленного пакета ---");
+    my_pkg.upgrade(); // Ожидаем успех и версию 13
+
+    println!("\n--- Тест 4: Повторная установка ---");
+    my_pkg.install(); // Ожидаем сообщение, что уже стоит
 }
