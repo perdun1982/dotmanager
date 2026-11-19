@@ -1,3 +1,5 @@
 [dependencies]
 packages = ["waybar", "fuzzel", "alacritty"]
 [links]
+"src/main.rs" = "~/test_main.rs"
+"rice.toml" = "~/test_rice.toml"

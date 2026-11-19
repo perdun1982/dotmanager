@@ -1,21 +1,14 @@
 mod models;
-use models::Package;
+use models::*;
+use std::fs;
+
 fn main() {
-    let mut my_pkg = Package {
-        name: String::from("waybar"),
-        version: 12,
-        is_installed: false,
-    };
 
-    println!("--- Тест 1: Обновление неустановленного пакета ---");
-    my_pkg.upgrade(); // Ожидаем ошибку
+    let content = fs::read_to_string("rice.toml").expect("Не удалось прочитать rice.toml");
+    let manifest: Manifest = toml::from_str(&content).expect("Ошибка в формате TOML");
 
-    println!("\n--- Тест 2: Установка ---");
-    my_pkg.install(); // Ожидаем успех
+    println!("Найдено пакетов: {}", manifest.dependencies.packages.len());
 
-    println!("\n--- Тест 3: Обновление установленного пакета ---");
-    my_pkg.upgrade(); // Ожидаем успех и версию 13
-
-    println!("\n--- Тест 4: Повторная установка ---");
-    my_pkg.install(); // Ожидаем сообщение, что уже стоит
+    manifest.install_all();
+    manifest.apply_links();
 }
